@@ -38,7 +38,7 @@ import { PatientModule } from './patient/patient.module';
         autoLoadEntities: true,
 
         // Automatically creates/updates tables during development
-        synchronize: true,
+        synchronize: false,
       }),
     }),
 
@@ -51,7 +51,7 @@ import { PatientModule } from './patient/patient.module';
     PatientModule,
   ],
 
-  controllers: [AppController, DoctorController],
+  controllers: [AppController],
 
   providers: [AppService],
 })
