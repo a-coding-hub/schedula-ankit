@@ -14,16 +14,26 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DoctorController = void 0;
 const common_1 = require("@nestjs/common");
+const doctor_service_1 = require("./doctor.service");
+const create_doctor_profile_dto_1 = require("./dto/create-doctor-profile.dto");
+const update_doctor_profile_dto_1 = require("./dto/update-doctor-profile.dto");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const user_role_enum_1 = require("../users/enums/user-role.enum");
 let DoctorController = class DoctorController {
+    doctorService;
+    constructor(doctorService) {
+        this.doctorService = doctorService;
+    }
     getProfile(request) {
-        return {
-            message: 'Welcome Doctor',
-            user: request.user,
-        };
+        return this.doctorService.getProfile(request.user.userId);
+    }
+    createProfile(request, dto) {
+        return this.doctorService.createProfile(request.user.userId, dto);
+    }
+    updateProfile(request, dto) {
+        return this.doctorService.updateProfile(request.user.userId, dto);
     }
 };
 exports.DoctorController = DoctorController;
@@ -36,7 +46,28 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], DoctorController.prototype, "getProfile", null);
+__decorate([
+    (0, common_1.Post)('profile'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(user_role_enum_1.UserRole.DOCTOR),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, create_doctor_profile_dto_1.CreateDoctorProfileDto]),
+    __metadata("design:returntype", void 0)
+], DoctorController.prototype, "createProfile", null);
+__decorate([
+    (0, common_1.Patch)('profile'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(user_role_enum_1.UserRole.DOCTOR),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, update_doctor_profile_dto_1.UpdateDoctorProfileDto]),
+    __metadata("design:returntype", void 0)
+], DoctorController.prototype, "updateProfile", null);
 exports.DoctorController = DoctorController = __decorate([
-    (0, common_1.Controller)('doctor')
+    (0, common_1.Controller)('doctor'),
+    __metadata("design:paramtypes", [doctor_service_1.DoctorService])
 ], DoctorController);
 //# sourceMappingURL=doctor.controller.js.map

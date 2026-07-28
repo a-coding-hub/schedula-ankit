@@ -12,6 +12,8 @@ export declare class AuthService {
         email: string;
         role: import("../users/enums/user-role.enum").UserRole;
         createdAt: Date;
+        doctorProfile: import("../doctor/entities/doctor.entity").Doctor;
+        patientProfile: import("../patient/entities/patient.entity").Patient;
     }>;
     login(loginDto: LoginDto): Promise<{
         accessToken: string;

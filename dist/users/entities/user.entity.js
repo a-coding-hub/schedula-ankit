@@ -12,6 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const user_role_enum_1 = require("../enums/user-role.enum");
+const typeorm_2 = require("typeorm");
+const doctor_entity_1 = require("../../doctor/entities/doctor.entity");
+const patient_entity_1 = require("../../patient/entities/patient.entity");
 let User = class User {
     id;
     name;
@@ -19,6 +22,8 @@ let User = class User {
     password;
     role;
     createdAt;
+    doctorProfile;
+    patientProfile;
 };
 exports.User = User;
 __decorate([
@@ -50,6 +55,14 @@ __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], User.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_2.OneToOne)(() => doctor_entity_1.Doctor, (doctor) => doctor.user),
+    __metadata("design:type", doctor_entity_1.Doctor)
+], User.prototype, "doctorProfile", void 0);
+__decorate([
+    (0, typeorm_2.OneToOne)(() => patient_entity_1.Patient, (patient) => patient.user),
+    __metadata("design:type", patient_entity_1.Patient)
+], User.prototype, "patientProfile", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)('users')
 ], User);
