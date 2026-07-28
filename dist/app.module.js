@@ -8,15 +8,43 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
+const typeorm_1 = require("@nestjs/typeorm");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
+const users_module_1 = require("./users/users.module");
+const auth_module_1 = require("./auth/auth.module");
+const doctor_controller_1 = require("./doctor/doctor.controller");
+const doctor_module_1 = require("./doctor/doctor.module");
+const patient_module_1 = require("./patient/patient.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [],
-        controllers: [app_controller_1.AppController],
+        imports: [
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+            }),
+            typeorm_1.TypeOrmModule.forRootAsync({
+                inject: [config_1.ConfigService],
+                useFactory: (configService) => ({
+                    type: 'postgres',
+                    host: configService.get('DB_HOST'),
+                    port: Number(configService.get('DB_PORT')),
+                    username: configService.get('DB_USERNAME'),
+                    password: configService.get('DB_PASSWORD'),
+                    database: configService.get('DB_NAME'),
+                    autoLoadEntities: true,
+                    synchronize: true,
+                }),
+            }),
+            users_module_1.UsersModule,
+            auth_module_1.AuthModule,
+            doctor_module_1.DoctorModule,
+            patient_module_1.PatientModule,
+        ],
+        controllers: [app_controller_1.AppController, doctor_controller_1.DoctorController],
         providers: [app_service_1.AppService],
     })
 ], AppModule);
